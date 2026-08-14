@@ -889,6 +889,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
   #menuBtn{top:calc(12px + env(safe-area-inset-top))}
   #locBtn{bottom:calc(150px + env(safe-area-inset-bottom))}
   .leaflet-top.leaflet-right{margin-top:calc(6px + env(safe-area-inset-top))}
+  /* ☰ görünürken zoom onun altından başlasın (çakışma olmasın) */
+  @media (max-width:820px){
+    .leaflet-top.leaflet-left{margin-top:calc(64px + env(safe-area-inset-top))}
+  }
+  #app.side-hidden .leaflet-top.leaflet-left{margin-top:calc(64px + env(safe-area-inset-top))}
   #banner{top:calc(12px + env(safe-area-inset-top))}
   #tileHelp{top:calc(8px + env(safe-area-inset-top))}
   button, a, .chip, .item, .leaflet-bar a{touch-action:manipulation}
@@ -1111,6 +1116,7 @@ function persist(){
 
 /* ================= HARİTA ================= */
 const map = L.map('map',{zoomControl:true, attributionControl:true});
+map.attributionControl.setPrefix(false);   // bayraklı "Leaflet" yazısını gizle (© Google kalır)
 
 // Katmanlar — Google karoları (kullanıcı zaten Google Maps kullanıyor; ağda genelde erişilebilir)
 const G_SUBS = ['mt0','mt1','mt2','mt3'];
@@ -1121,15 +1127,10 @@ function gTile(lyrs, attr){
 // Hepsi Google — OpenStreetMap ağda engelli olduğu için kaldırıldı
 const sokak  = gTile('m','© Google');            // Google sokak / yol haritası
 const uydu   = gTile('y','© Google');            // uydu + sokak isimleri (hibrit)
-const arazi  = gTile('p','© Google');            // arazi / topoğrafya
-// Yedek uydu (Google engellenirse)
-const uyduEsri = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{
-  maxZoom:19, attribution:'© Esri'
-});
 
 sokak.addTo(map);
 L.control.layers(
-  {"🛣️ Sokak":sokak, "🛰️ Uydu":uydu, "🏔️ Arazi":arazi, "🛰️ Uydu (yedek)":uyduEsri},
+  {"🛣️ Sokak":sokak, "🛰️ Uydu":uydu},
   {}, {position:'topright', collapsed:true}
 ).addTo(map);
 
@@ -1229,7 +1230,7 @@ map.addControl(new SVControl());
 
 // Karolar yüklenemezse (önizleme penceresi / ağ engeli) kullanıcıyı bilgilendir
 let _tileErr=0, _tileOK=false;
-[sokak,uydu,arazi,uyduEsri].forEach(tl=>{
+[sokak,uydu].forEach(tl=>{
   tl.on('tileerror', ()=>{ _tileErr++; if(_tileErr>=8 && !_tileOK) showTileHelp(); });
   tl.on('tileload',  ()=>{ _tileOK=true; hideTileHelp(); });
 });
