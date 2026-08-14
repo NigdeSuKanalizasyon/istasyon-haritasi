@@ -900,6 +900,17 @@ svg.leaflet-image-layer.leaflet-interactive path {
     .chip{padding:7px 11px;font-size:12.5px}
   }
 
+  /* ---------- Yeni nokta formu ---------- */
+  #addModal{position:fixed;inset:0;z-index:1600;background:rgba(15,23,42,.6);display:none;
+    align-items:center;justify-content:center;padding:18px}
+  #addModal.open{display:flex}
+  .ad-card{background:#fff;border-radius:16px;box-shadow:var(--shadow);max-width:360px;width:100%;padding:20px}
+  .ad-card h3{margin:0 0 12px;font-size:16px}
+  .ad-card label{font-size:11px;color:var(--muted);font-weight:700;display:block;margin:8px 0 3px}
+  .ad-card input, .ad-card select{width:100%;padding:9px 8px;border:1px solid var(--line);border-radius:9px;font-size:14px;background:#fff}
+  .ad-card input:focus, .ad-card select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+  @media (pointer:coarse){ .ad-card input, .ad-card select{font-size:16px} }
+
   /* ---------- QR penceresi ---------- */
   #qrModal{position:fixed;inset:0;z-index:1600;background:rgba(15,23,42,.6);display:none;
     align-items:center;justify-content:center;padding:18px}
@@ -933,20 +944,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
       <div id="missingWrap"></div>
 
-      <div class="sec-title">Bölgeler</div>
-      <div class="chips" id="regionChips"></div>
-
-      <div class="sec-title">Tip</div>
-      <div class="chips" id="typeChips"></div>
-
-      <div class="sec-title">Düzenleme</div>
-      <div class="toggle-row">
-        <div>
-          <div class="t-label">Sürükleyerek taşı</div>
-          <div class="t-sub">Açıkken pinleri sürükleyip bırakabilirsin</div>
-        </div>
-        <label class="switch"><input type="checkbox" id="dragToggle"/><span class="slider"></span></label>
-      </div>
+      <button class="ep-btn" id="addBtn" style="width:100%;margin-top:4px;background:#16a34a;color:#fff;border-color:#16a34a" onclick="openAddPanel()">➕ Yeni Nokta Ekle</button>
 
       <div class="sec-title" id="qrSecTitle">Uygulama</div>
       <button class="ep-btn" id="installBtn" style="width:100%;display:none;margin-bottom:6px;background:#2563eb;color:#fff;border-color:#2563eb" onclick="installApp()">📲 Uygulama olarak yükle</button>
@@ -987,6 +985,26 @@ svg.leaflet-image-layer.leaflet-interactive path {
         </div>
         <iframe id="svmFrame" src="about:blank" allowfullscreen loading="eager"
                 allow="accelerometer; gyroscope; fullscreen"></iframe>
+      </div>
+    </div>
+
+    <div id="addModal">
+      <div class="ad-card">
+        <h3>➕ Yeni Nokta Ekle</h3>
+        <label>İstasyon adı</label>
+        <input id="adName" type="text" placeholder="Örn: AMAS K21" autocomplete="off" />
+        <div style="display:flex;gap:8px">
+          <div style="flex:1"><label>Nokta No</label><input id="adNo" type="text" inputmode="numeric" autocomplete="off" /></div>
+          <div style="flex:1"><label>Tip</label><select id="adType"><option value="Kuyu">Kuyu</option><option value="Terfi">Terfi</option><option value="Depo">Depo</option></select></div>
+        </div>
+        <label>Bölge</label>
+        <input id="adRegion" type="text" list="regionList" placeholder="Örn: AMAS" autocomplete="off" />
+        <datalist id="regionList"></datalist>
+        <div class="ep-hint" style="margin-top:10px">Ekle'ye bastıktan sonra <b>haritada yerine dokun</b> — pin oraya konur. Üstteki şeritten koordinatı elle de girebilirsin.</div>
+        <div class="ep-btns" style="margin-top:6px">
+          <button class="ep-btn save" onclick="addStation()">✓ Ekle</button>
+          <button class="ep-btn" onclick="closeAddPanel()">İptal</button>
+        </div>
       </div>
     </div>
 
@@ -1069,12 +1087,25 @@ const state = {
       }
     });
   }catch(e){/* localStorage yoksa sessizce geç */}
+  try{
+    const rawC = localStorage.getItem('istasyon_yeni_v1');
+    if(rawC){
+      JSON.parse(rawC).forEach(cs=>{
+        if(!STATIONS.some(s=>s.no===cs.no)){
+          cs._custom=true; STATIONS.push(cs);
+          state.activeRegions.add(cs.region); state.activeTypes.add(cs.type);
+        }
+      });
+    }
+  }catch(e){}
 })();
 function persist(){
   try{
     const obj={};
     STATIONS.forEach(s=>{ if(s.lat!=null) obj[s.no]={lat:s.lat,lon:s.lon}; });
     localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
+    const customs=STATIONS.filter(s=>s._custom).map(s=>({no:s.no,name:s.name,region:s.region,type:s.type,lat:s.lat,lon:s.lon}));
+    localStorage.setItem('istasyon_yeni_v1', JSON.stringify(customs));
   }catch(e){}
 }
 
@@ -1182,7 +1213,7 @@ window.svPanoFor=function(no){
   if(s && s.lat!=null) openSvPano(s.lat, s.lon, s.name);
 };
 document.getElementById('svModal').addEventListener('click', e=>{ if(e.target.id==='svModal') closeSvPano(); });
-document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeSvPano(); if(window.closeQr) closeQr(); } });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeSvPano(); if(window.closeQr) closeQr(); if(window.closeAddPanel) closeAddPanel(); } });
 
 const SVControl = L.Control.extend({
   options:{position:'topright'},
@@ -1395,23 +1426,6 @@ function matchSearch(s){
 }
 
 /* ================= LİSTE / FİLTRE UI ================= */
-function renderChips(){
-  const rc=document.getElementById('regionChips'); rc.innerHTML='';
-  [...new Set(STATIONS.map(s=>s.region))].forEach(r=>{
-    const c=document.createElement('div'); c.className='chip'+(state.activeRegions.has(r)?'':' off');
-    c.innerHTML=`<span class="dot" style="background:#94a3b8"></span>${esc(r)}`;
-    c.onclick=()=>{ state.activeRegions.has(r)?state.activeRegions.delete(r):state.activeRegions.add(r); c.classList.toggle('off'); applyFilters(); renderList(); };
-    rc.appendChild(c);
-  });
-  const tc=document.getElementById('typeChips'); tc.innerHTML='';
-  [...new Set(STATIONS.map(s=>s.type))].forEach(t=>{
-    const c=document.createElement('div'); c.className='chip'+(state.activeTypes.has(t)?'':' off');
-    c.innerHTML=`<span class="dot" style="background:${TYPE_COLORS[t]||'#334155'}"></span>${esc(TYPE_LABEL[t]||t)} <b style="opacity:.5">(${TYPE_LETTER[t]||'?'})</b>`;
-    c.onclick=()=>{ state.activeTypes.has(t)?state.activeTypes.delete(t):state.activeTypes.add(t); c.classList.toggle('off'); applyFilters(); renderList(); };
-    tc.appendChild(c);
-  });
-}
-
 function renderMissing(){
   const wrap=document.getElementById('missingWrap');
   const miss=STATIONS.filter(s=>s.lat==null);
@@ -1495,14 +1509,6 @@ map.on('click', e=>{
   }
 });
 
-/* ================= SÜRÜKLE MODU ================= */
-document.getElementById('dragToggle').addEventListener('change', e=>{
-  state.dragMode=e.target.checked;
-  document.getElementById('map').classList.toggle('drag-on', state.dragMode);
-  Object.values(state.markers).forEach(m=>{ if(!m.dragging) return; if(state.dragMode) m.dragging.enable(); else if(!(state.editDrag && m._sno===state.editNo)) m.dragging.disable(); });
-  toast(state.dragMode?"Sürükleme açık — pinleri taşıyabilirsin":"Sürükleme kapalı");
-});
-
 /* ================= KONUMUM ================= */
 document.getElementById('locBtn').onclick=()=>{
   map.locate({setView:true, maxZoom:16, enableHighAccuracy:true});
@@ -1566,6 +1572,36 @@ window.addEventListener('appinstalled', ()=>{ toast('Uygulama yüklendi 🎉'); 
   }
 })();
 
+/* ================= YENİ NOKTA EKLEME ================= */
+window.openAddPanel=function(){
+  const dl=document.getElementById('regionList');
+  dl.innerHTML=[...new Set(STATIONS.map(s=>s.region))].map(r=>`<option value="${esc(r)}">`).join('');
+  const maxNo=STATIONS.reduce((m,s)=>Math.max(m, +s.no||0), 0);
+  document.getElementById('adNo').value=String(maxNo+1);
+  document.getElementById('adName').value='';
+  document.getElementById('adRegion').value='';
+  document.getElementById('addModal').classList.add('open');
+  if(window.innerWidth<=820) closeDrawer();
+  setTimeout(()=>{try{document.getElementById('adName').focus()}catch(e){}},150);
+};
+window.closeAddPanel=function(){ document.getElementById('addModal').classList.remove('open'); };
+window.addStation=function(){
+  const name=document.getElementById('adName').value.trim();
+  const noV=parseInt(document.getElementById('adNo').value.trim(),10);
+  const type=document.getElementById('adType').value;
+  const region=document.getElementById('adRegion').value.trim()||'DİĞER';
+  if(!name){ toast('İstasyon adı gerekli'); return; }
+  if(!isFinite(noV) || noV<=0){ toast('Geçerli bir Nokta No gir'); return; }
+  if(STATIONS.some(s=>s.no===noV)){ toast('Bu Nokta No zaten kayıtlı: '+noV); return; }
+  const s={no:noV, name, region, type, lat:null, lon:null, _custom:true};
+  STATIONS.push(s);
+  state.activeRegions.add(region); state.activeTypes.add(type);
+  persist(); renderList();
+  closeAddPanel();
+  placeStation(noV);
+};
+document.getElementById('addModal').addEventListener('click',e=>{ if(e.target.id==='addModal') closeAddPanel(); });
+
 /* ================= ARAMA ================= */
 document.getElementById('search').addEventListener('input', e=>{
   state.search=e.target.value.trim();
@@ -1579,7 +1615,6 @@ function fitAll(){
   else{ map.setView([38.0,34.69],13); }
 }
 buildMarkers();
-renderChips();
 renderList();
 applyFilters();
 fitAll();
