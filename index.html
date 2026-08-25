@@ -936,7 +936,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <span class="logo">📍</span>
       <div style="flex:1">
         <h1>İstasyon Konum Haritası</h1>
-        <div class="count" id="countLabel">—</div>
       </div>
       <button id="hideSide" title="Paneli gizle">◀</button>
       <button id="closeSide" style="display:none;background:none;border:none;color:#94a3b8;font-size:22px;cursor:pointer">×</button>
@@ -946,8 +945,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <span class="icon">🔎</span>
         <input id="search" type="text" placeholder="İstasyon ara (ad / no / bölge)…" autocomplete="off" />
       </div>
-
-      <div id="missingWrap"></div>
 
       <button class="ep-btn" id="addBtn" style="width:100%;margin-top:4px;background:#16a34a;color:#fff;border-color:#16a34a" onclick="openAddPanel()">➕ Yeni Nokta Ekle</button>
 
@@ -1047,7 +1044,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 <script>
 /* ================= VERİ ================= */
-const STATIONS = [{"no":12008,"name":"AMAS K1-68","region":"AMAS","type":"Kuyu","lat":38.016972,"lon":34.719448},{"no":12017,"name":"AMAS K10-Yeni Kuyu 1","region":"AMAS","type":"Kuyu","lat":38.004307,"lon":34.710381},{"no":12018,"name":"AMAS K11-33","region":"AMAS","type":"Kuyu","lat":38.00087,"lon":34.70813},{"no":12019,"name":"AMAS K12-34","region":"AMAS","type":"Kuyu","lat":37.99852,"lon":34.704227},{"no":12020,"name":"AMAS K13-36","region":"AMAS","type":"Kuyu","lat":37.997917,"lon":34.703461},{"no":12021,"name":"AMAS K14-38","region":"AMAS","type":"Kuyu","lat":37.99662,"lon":34.700191},{"no":12022,"name":"AMAS K15-37","region":"AMAS","type":"Kuyu","lat":38.001305,"lon":34.700176},{"no":12023,"name":"AMAS K16-Terfi Altı","region":"AMAS","type":"Kuyu","lat":38.003429,"lon":34.698818},{"no":12074,"name":"AMAS K18","region":"AMAS","type":"Kuyu","lat":38.014053,"lon":34.714249},{"no":12009,"name":"AMAS K2-32","region":"AMAS","type":"Kuyu","lat":38.015476,"lon":34.719963},{"no":12056,"name":"AMAS K20","region":"AMAS","type":"Kuyu","lat":null,"lon":null},{"no":12010,"name":"AMAS K3 - Yeni Kuyu","region":"AMAS","type":"Kuyu","lat":38.015713,"lon":34.716911},{"no":12011,"name":"AMAS K4-31","region":"AMAS","type":"Kuyu","lat":38.014992,"lon":34.716671},{"no":12012,"name":"AMAS K5-30","region":"AMAS","type":"Kuyu","lat":38.014271,"lon":34.716175},{"no":12013,"name":"AMAS K6 Alay Durağı","region":"AMAS","type":"Kuyu","lat":38.010094,"lon":34.714134},{"no":12014,"name":"AMAS K7-29","region":"AMAS","type":"Kuyu","lat":38.007587,"lon":34.712769},{"no":12015,"name":"AMAS K8 Yeni Kuyu 2","region":"AMAS","type":"Kuyu","lat":38.006409,"lon":34.71209},{"no":12016,"name":"AMAS K9-35","region":"AMAS","type":"Kuyu","lat":38.006344,"lon":34.707951},{"no":12062,"name":"AMAS TERFİ P1","region":"AMAS","type":"Terfi","lat":38.005742,"lon":34.699684},{"no":12072,"name":"AMAS TERFİ P2","region":"AMAS","type":"Terfi","lat":38.005742,"lon":34.699684},{"no":12073,"name":"AMAS TERFİ P3","region":"AMAS","type":"Terfi","lat":38.005742,"lon":34.699684},{"no":12042,"name":"AMAS-K17","region":"AMAS","type":"Kuyu","lat":37.98,"lon":34.678082},{"no":12063,"name":"YEŞİLBURÇ DEPO","region":"AMAS","type":"Depo","lat":38.004501,"lon":34.673801},{"no":12067,"name":"EFENDİ BEY DEPO","region":"EFENDİ BEY","type":"Depo","lat":37.980225,"lon":34.677635},{"no":12041,"name":"EFENDİ BEY K1","region":"EFENDİ BEY","type":"Kuyu","lat":37.972168,"lon":34.674408},{"no":12043,"name":"EFENDİ BEY K3-18","region":"EFENDİ BEY","type":"Kuyu","lat":37.980221,"lon":34.678337},{"no":12066,"name":"FERTEK DEPO","region":"FERTEK","type":"Depo","lat":37.981346,"lon":34.618908},{"no":12037,"name":"FERTEK K1 (mezarlık altı)","region":"FERTEK","type":"Kuyu","lat":37.970291,"lon":34.618061},{"no":12038,"name":"FERTEK K2 (arılı)","region":"FERTEK","type":"Kuyu","lat":37.978241,"lon":34.622341},{"no":12039,"name":"FERTEK K3 (Sulama)","region":"FERTEK","type":"Kuyu","lat":37.978783,"lon":34.620552},{"no":12040,"name":"FERTEK K4 (Daşkesi)","region":"FERTEK","type":"Kuyu","lat":37.976078,"lon":34.625237},{"no":12070,"name":"Fertek depo 2","region":"FERTEK","type":"Depo","lat":37.974064,"lon":34.669365},{"no":12027,"name":"KAYA ARDI 10-4","region":"KAYA ARDI","type":"Kuyu","lat":37.989841,"lon":34.669281},{"no":12068,"name":"KAYA ARDI DEPO - 1","region":"KAYA ARDI","type":"Depo","lat":37.973827,"lon":34.668976},{"no":12044,"name":"KAYA ARDI K1-58","region":"KAYA ARDI","type":"Kuyu","lat":37.998447,"lon":34.666985},{"no":12054,"name":"KAYA ARDI K11-12","region":"KAYA ARDI","type":"Kuyu","lat":37.986649,"lon":34.668427},{"no":12055,"name":"KAYA ARDI K12-Virane","region":"KAYA ARDI","type":"Kuyu","lat":37.984005,"lon":34.666592},{"no":12045,"name":"KAYA ARDI K2-10","region":"KAYA ARDI","type":"Kuyu","lat":37.99847,"lon":34.668087},{"no":12046,"name":"KAYA ARDI K3-9","region":"KAYA ARDI","type":"Kuyu","lat":37.996216,"lon":34.668125},{"no":12047,"name":"KAYA ARDI K4-8","region":"KAYA ARDI","type":"Kuyu","lat":37.994003,"lon":34.66951},{"no":12048,"name":"KAYA ARDI K5-7","region":"KAYA ARDI","type":"Kuyu","lat":37.993481,"lon":34.667721},{"no":12049,"name":"KAYA ARDI K6","region":"KAYA ARDI","type":"Kuyu","lat":37.992813,"lon":34.669884},{"no":12050,"name":"KAYA ARDI K7-69 (Camii Yanı)","region":"KAYA ARDI","type":"Kuyu","lat":37.990299,"lon":34.666992},{"no":12051,"name":"KAYA ARDI K8-3","region":"KAYA ARDI","type":"Kuyu","lat":37.991035,"lon":34.668781},{"no":12052,"name":"KAYA ARDI K9-11","region":"KAYA ARDI","type":"Kuyu","lat":37.98877,"lon":34.666615},{"no":12065,"name":"KIR ÜSTÜ DEPO","region":"KIR ÜSTÜ","type":"Depo","lat":37.969358,"lon":34.712403},{"no":12030,"name":"KIR ÜSTÜ K1-Pelit Camii","region":"KIR ÜSTÜ","type":"Kuyu","lat":37.989944,"lon":34.698467},{"no":12031,"name":"KIR ÜSTÜ K2-67","region":"KIR ÜSTÜ","type":"Kuyu","lat":37.989426,"lon":34.696781},{"no":12032,"name":"KIR ÜSTÜ K3-60 (Trafo Yanı)","region":"KIR ÜSTÜ","type":"Kuyu","lat":37.98457,"lon":34.715164},{"no":12033,"name":"KIR ÜSTÜ K4-27(atasanayi)","region":"KIR ÜSTÜ","type":"Kuyu","lat":37.982765,"lon":34.715218},{"no":12034,"name":"KIR ÜSTÜ K5 (ATASANAYİ)","region":"KIR ÜSTÜ","type":"Kuyu","lat":37.982655,"lon":34.716827},{"no":12035,"name":"KIR ÜSTÜ K6-73(okul içi)","region":"KIR ÜSTÜ","type":"Kuyu","lat":37.962559,"lon":34.700207},{"no":12036,"name":"KIR ÜSTÜ K7-20(BİRANELER)","region":"KIR ÜSTÜ","type":"Kuyu","lat":37.977734,"lon":34.718975},{"no":12076,"name":"Kumluca K1","region":"Kumluca","type":"Kuyu","lat":null,"lon":null},{"no":12064,"name":"NİĞDE EVLERİ DEPO","region":"NİĞDE EVLERİ","type":"Depo","lat":37.994301,"lon":34.690403},{"no":12024,"name":"NİĞDE EVLERİ K1-44","region":"NİĞDE EVLERİ","type":"Kuyu","lat":38.004051,"lon":34.695648},{"no":12025,"name":"NİĞDE EVLERİ K2-45","region":"NİĞDE EVLERİ","type":"Kuyu","lat":38.00417,"lon":34.69561},{"no":12026,"name":"NİĞDE EVLERİ K3-66","region":"NİĞDE EVLERİ","type":"Kuyu","lat":37.999706,"lon":34.69593},{"no":12028,"name":"NİĞDE EVLERİ K5-43(cami içi)","region":"NİĞDE EVLERİ","type":"Kuyu","lat":37.994003,"lon":34.690544},{"no":12029,"name":"Fertek-8 (Üçgen Park)","region":"ÖZBELDE","type":"Kuyu","lat":37.993973,"lon":34.691307},{"no":12071,"name":"depo 12071","region":"ÖZBELDE","type":"Depo","lat":null,"lon":null},{"no":12069,"name":"ÖZBELDE DEPO","region":"ÖZBELDE","type":"Depo","lat":37.977295,"lon":34.64381},{"no":12057,"name":"ÖZBELDE K2-54(50)","region":"ÖZBELDE","type":"Kuyu","lat":37.959816,"lon":34.644085},{"no":12058,"name":"ÖZBELDE K3-51","region":"ÖZBELDE","type":"Kuyu","lat":37.965824,"lon":34.636574},{"no":12059,"name":"ÖZBELDE K4-52","region":"ÖZBELDE","type":"Kuyu","lat":37.967255,"lon":34.636646},{"no":12060,"name":"ÖZBELDE K5-53","region":"ÖZBELDE","type":"Kuyu","lat":37.96809,"lon":34.639244},{"no":12061,"name":"ÖZBELDE K6-55","region":"ÖZBELDE","type":"Kuyu","lat":37.96727,"lon":34.642044}];
+const STATIONS = [{"no":12008,"name":"AMAS K1-68","region":"AMAS","type":"Kuyu","lat":38.016972,"lon":34.719448},{"no":12017,"name":"AMAS K10-Yeni Kuyu 1","region":"AMAS","type":"Kuyu","lat":38.004307,"lon":34.710381},{"no":12018,"name":"AMAS K11-33","region":"AMAS","type":"Kuyu","lat":38.00087,"lon":34.70813},{"no":12019,"name":"AMAS K12-34","region":"AMAS","type":"Kuyu","lat":37.99852,"lon":34.704227},{"no":12020,"name":"AMAS K13-36","region":"AMAS","type":"Kuyu","lat":37.997917,"lon":34.703461},{"no":12021,"name":"AMAS K14-38","region":"AMAS","type":"Kuyu","lat":37.99662,"lon":34.700191},{"no":12022,"name":"AMAS K15-37","region":"AMAS","type":"Kuyu","lat":38.001305,"lon":34.700176},{"no":12023,"name":"AMAS K16-Terfi Altı","region":"AMAS","type":"Kuyu","lat":38.003429,"lon":34.698818},{"no":12074,"name":"AMAS K18","region":"AMAS","type":"Kuyu","lat":38.014053,"lon":34.714249},{"no":12009,"name":"AMAS K2-32","region":"AMAS","type":"Kuyu","lat":38.015476,"lon":34.719963},{"no":12010,"name":"AMAS K3 - Yeni Kuyu","region":"AMAS","type":"Kuyu","lat":38.015713,"lon":34.716911},{"no":12011,"name":"AMAS K4-31","region":"AMAS","type":"Kuyu","lat":38.014992,"lon":34.716671},{"no":12012,"name":"AMAS K5-30","region":"AMAS","type":"Kuyu","lat":38.014271,"lon":34.716175},{"no":12013,"name":"AMAS K6 Alay Durağı","region":"AMAS","type":"Kuyu","lat":38.010094,"lon":34.714134},{"no":12014,"name":"AMAS K7-29","region":"AMAS","type":"Kuyu","lat":38.007587,"lon":34.712769},{"no":12015,"name":"AMAS K8 Yeni Kuyu 2","region":"AMAS","type":"Kuyu","lat":38.006409,"lon":34.71209},{"no":12016,"name":"AMAS K9-35","region":"AMAS","type":"Kuyu","lat":38.006344,"lon":34.707951},{"no":12062,"name":"AMAS TERFİ P1","region":"AMAS","type":"Terfi","lat":38.005742,"lon":34.699684},{"no":12072,"name":"AMAS TERFİ P2","region":"AMAS","type":"Terfi","lat":38.005742,"lon":34.699684},{"no":12073,"name":"AMAS TERFİ P3","region":"AMAS","type":"Terfi","lat":38.005742,"lon":34.699684},{"no":12042,"name":"AMAS-K17","region":"AMAS","type":"Kuyu","lat":37.98,"lon":34.678082},{"no":12063,"name":"YEŞİLBURÇ DEPO","region":"AMAS","type":"Depo","lat":38.004501,"lon":34.673801},{"no":12067,"name":"EFENDİ BEY DEPO","region":"EFENDİ BEY","type":"Depo","lat":37.980225,"lon":34.677635},{"no":12041,"name":"EFENDİ BEY K1","region":"EFENDİ BEY","type":"Kuyu","lat":37.972168,"lon":34.674408},{"no":12043,"name":"EFENDİ BEY K3-18","region":"EFENDİ BEY","type":"Kuyu","lat":37.980221,"lon":34.678337},{"no":12066,"name":"FERTEK DEPO","region":"FERTEK","type":"Depo","lat":37.981346,"lon":34.618908},{"no":12037,"name":"FERTEK K1 (mezarlık altı)","region":"FERTEK","type":"Kuyu","lat":37.970291,"lon":34.618061},{"no":12038,"name":"FERTEK K2 (arılı)","region":"FERTEK","type":"Kuyu","lat":37.978241,"lon":34.622341},{"no":12039,"name":"FERTEK K3 (Sulama)","region":"FERTEK","type":"Kuyu","lat":37.978783,"lon":34.620552},{"no":12040,"name":"FERTEK K4 (Daşkesi)","region":"FERTEK","type":"Kuyu","lat":37.976078,"lon":34.625237},{"no":12070,"name":"Fertek depo 2","region":"FERTEK","type":"Depo","lat":37.974064,"lon":34.669365},{"no":12027,"name":"KAYA ARDI 10-4","region":"KAYA ARDI","type":"Kuyu","lat":37.989841,"lon":34.669281},{"no":12068,"name":"KAYA ARDI DEPO - 1","region":"KAYA ARDI","type":"Depo","lat":37.973827,"lon":34.668976},{"no":12044,"name":"KAYA ARDI K1-58","region":"KAYA ARDI","type":"Kuyu","lat":37.998447,"lon":34.666985},{"no":12054,"name":"KAYA ARDI K11-12","region":"KAYA ARDI","type":"Kuyu","lat":37.986649,"lon":34.668427},{"no":12055,"name":"KAYA ARDI K12-Virane","region":"KAYA ARDI","type":"Kuyu","lat":37.984005,"lon":34.666592},{"no":12045,"name":"KAYA ARDI K2-10","region":"KAYA ARDI","type":"Kuyu","lat":37.99847,"lon":34.668087},{"no":12046,"name":"KAYA ARDI K3-9","region":"KAYA ARDI","type":"Kuyu","lat":37.996216,"lon":34.668125},{"no":12047,"name":"KAYA ARDI K4-8","region":"KAYA ARDI","type":"Kuyu","lat":37.994003,"lon":34.66951},{"no":12048,"name":"KAYA ARDI K5-7","region":"KAYA ARDI","type":"Kuyu","lat":37.993481,"lon":34.667721},{"no":12049,"name":"KAYA ARDI K6","region":"KAYA ARDI","type":"Kuyu","lat":37.992813,"lon":34.669884},{"no":12050,"name":"KAYA ARDI K7-69 (Camii Yanı)","region":"KAYA ARDI","type":"Kuyu","lat":37.990299,"lon":34.666992},{"no":12051,"name":"KAYA ARDI K8-3","region":"KAYA ARDI","type":"Kuyu","lat":37.991035,"lon":34.668781},{"no":12052,"name":"KAYA ARDI K9-11","region":"KAYA ARDI","type":"Kuyu","lat":37.98877,"lon":34.666615},{"no":12065,"name":"KIR ÜSTÜ DEPO","region":"KIR ÜSTÜ","type":"Depo","lat":37.969358,"lon":34.712403},{"no":12030,"name":"KIR ÜSTÜ K1-Pelit Camii","region":"KIR ÜSTÜ","type":"Kuyu","lat":37.989944,"lon":34.698467},{"no":12031,"name":"KIR ÜSTÜ K2-67","region":"KIR ÜSTÜ","type":"Kuyu","lat":37.989426,"lon":34.696781},{"no":12032,"name":"KIR ÜSTÜ K3-60 (Trafo Yanı)","region":"KIR ÜSTÜ","type":"Kuyu","lat":37.98457,"lon":34.715164},{"no":12033,"name":"KIR ÜSTÜ K4-27(atasanayi)","region":"KIR ÜSTÜ","type":"Kuyu","lat":37.982765,"lon":34.715218},{"no":12034,"name":"KIR ÜSTÜ K5 (ATASANAYİ)","region":"KIR ÜSTÜ","type":"Kuyu","lat":37.982655,"lon":34.716827},{"no":12035,"name":"KIR ÜSTÜ K6-73(okul içi)","region":"KIR ÜSTÜ","type":"Kuyu","lat":37.962559,"lon":34.700207},{"no":12036,"name":"KIR ÜSTÜ K7-20(BİRANELER)","region":"KIR ÜSTÜ","type":"Kuyu","lat":37.977734,"lon":34.718975},{"no":12064,"name":"NİĞDE EVLERİ DEPO","region":"NİĞDE EVLERİ","type":"Depo","lat":37.994301,"lon":34.690403},{"no":12024,"name":"NİĞDE EVLERİ K1-44","region":"NİĞDE EVLERİ","type":"Kuyu","lat":38.004051,"lon":34.695648},{"no":12025,"name":"NİĞDE EVLERİ K2-45","region":"NİĞDE EVLERİ","type":"Kuyu","lat":38.00417,"lon":34.69561},{"no":12026,"name":"NİĞDE EVLERİ K3-66","region":"NİĞDE EVLERİ","type":"Kuyu","lat":37.999706,"lon":34.69593},{"no":12028,"name":"NİĞDE EVLERİ K5-43(cami içi)","region":"NİĞDE EVLERİ","type":"Kuyu","lat":37.994003,"lon":34.690544},{"no":12029,"name":"Fertek-8 (Üçgen Park)","region":"ÖZBELDE","type":"Kuyu","lat":37.993973,"lon":34.691307},{"no":12069,"name":"ÖZBELDE DEPO","region":"ÖZBELDE","type":"Depo","lat":37.977295,"lon":34.64381},{"no":12057,"name":"ÖZBELDE K2-54(50)","region":"ÖZBELDE","type":"Kuyu","lat":37.959816,"lon":34.644085},{"no":12058,"name":"ÖZBELDE K3-51","region":"ÖZBELDE","type":"Kuyu","lat":37.965824,"lon":34.636574},{"no":12059,"name":"ÖZBELDE K4-52","region":"ÖZBELDE","type":"Kuyu","lat":37.967255,"lon":34.636646},{"no":12060,"name":"ÖZBELDE K5-53","region":"ÖZBELDE","type":"Kuyu","lat":37.96809,"lon":34.639244},{"no":12061,"name":"ÖZBELDE K6-55","region":"ÖZBELDE","type":"Kuyu","lat":37.96727,"lon":34.642044}];
 
 // Pin renkleri: tipe göre (Kuyu mavi, Depo kırmızı, Terfi turuncu)
 const TYPE_COLORS = {"Kuyu":"#2563eb","Depo":"#dc2626","Terfi":"#ea580c"};
@@ -1130,7 +1127,7 @@ const uydu   = gTile('y','© Google');            // uydu + sokak isimleri (hibr
 
 sokak.addTo(map);
 L.control.layers(
-  {"🛣️ Sokak":sokak, "🛰️ Uydu":uydu},
+  {"🗺️ Harita":sokak, "🛰️ Uydu":uydu},
   {}, {position:'topright', collapsed:true}
 ).addTo(map);
 
@@ -1378,7 +1375,6 @@ function setCoord(no, lat, lon, refreshList){
   }
   persist();
   if(refreshList) renderList();
-  updateCount();
 }
 
 /* ================= MARKER ================= */
@@ -1420,45 +1416,60 @@ function applyFilters(){
     else{ if(map.hasLayer(m)) map.removeLayer(m); }
   });
 }
+/* Türkçe karakterleri sadeleştir: kir üstü = KIR ÜSTÜ, uydu klavye farkları vs. */
+function trNorm(x){
+  return String(x==null?'':x)
+    .replace(/İ/g,'i').replace(/I/g,'i').replace(/ı/g,'i')
+    .toLowerCase()
+    .replace(/ş/g,'s').replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ö/g,'o').replace(/ç/g,'c')
+    .replace(/â/g,'a').replace(/î/g,'i').replace(/û/g,'u');
+}
+/* Levenshtein mesafesi (yazım hatası toleransı için) */
+function lev(a,b){
+  const m=a.length,n=b.length;
+  if(Math.abs(m-n)>2) return 99;
+  const d=new Array(n+1); for(let j=0;j<=n;j++) d[j]=j;
+  for(let i=1;i<=m;i++){ let prev=d[0]; d[0]=i;
+    for(let j=1;j<=n;j++){ const t=d[j];
+      d[j]=Math.min(d[j]+1, d[j-1]+1, prev+(a[i-1]===b[j-1]?0:1)); prev=t; } }
+  return d[n];
+}
+/* t, w'nin içinde sıralı alt dizi mi? (ams -> amas) */
+function subseq(t,w){ let i=0; for(const ch of w){ if(ch===t[i]) i++; if(i===t.length) return true; } return i===t.length; }
+function tokenHits(t, hay, words){
+  if(hay.includes(t)) return true;
+  if(/^[0-9]+$/.test(t)) return false;   // sayı aramaları birebir eşleşsin
+  const th = t.length>=6 ? 2 : (t.length>=3 ? 1 : 0);
+  for(const w of words){
+    if(w.startsWith(t)) return true;
+    if(th>0 && lev(t,w)<=th) return true;
+    if(t.length>=3 && w.length>=t.length && w.length-t.length<=2 && subseq(t,w)) return true;
+    if(th>0 && w.length>t.length+1 && lev(t, w.slice(0,t.length+1))<=th) return true;
+  }
+  return false;
+}
 function matchSearch(s){
   if(!state.search) return true;
-  const q=state.search.toLowerCase();
-  return (s.name||'').toLowerCase().includes(q) || String(s.no).includes(q) || (s.region||'').toLowerCase().includes(q) || (s.type||'').toLowerCase().includes(q);
+  const hay=trNorm(s.name+' '+s.no+' '+s.region+' '+s.type);
+  const words=hay.split(/[^a-z0-9]+/).filter(Boolean);
+  const tokens=trNorm(state.search).split(/\s+/).filter(Boolean);
+  if(!tokens.length) return true;
+  return tokens.every(t=>tokenHits(t,hay,words));
 }
 
 /* ================= LİSTE / FİLTRE UI ================= */
-function renderMissing(){
-  const wrap=document.getElementById('missingWrap');
-  const miss=STATIONS.filter(s=>s.lat==null);
-  if(!miss.length){ wrap.innerHTML=''; return; }
-  wrap.innerHTML=`<div class="missing-box">
-    <div class="mb-title">⚠️ Koordinatı olmayan (${miss.length})</div>
-    ${miss.map(s=>`<div class="item" data-no="${s.no}" style="padding:6px 4px">
-      <span class="warnico">⚠️</span>
-      <div class="txt"><div class="name">${esc(s.name)}</div><div class="meta">${esc(s.region)} • ${esc(TYPE_LABEL[s.type]||s.type)}</div></div>
-      <button class="btn-mini" onclick="placeStation(${s.no})">Yerleştir</button>
-    </div>`).join('')}
-  </div>`;
-}
-
 function renderList(){
-  renderMissing();
   const list=document.getElementById('list'); list.innerHTML='';
-  const shown=STATIONS.filter(s=>s.lat!=null && state.activeRegions.has(s.region) && state.activeTypes.has(s.type) && matchSearch(s));
+  const shown=STATIONS.filter(s=> state.activeRegions.has(s.region) && state.activeTypes.has(s.type) && matchSearch(s));
   shown.forEach(s=>{
-    const color=pinColor(s);
+    const has = s.lat!=null;
+    const color= has ? pinColor(s) : '#94a3b8';
     const el=document.createElement('div'); el.className='item'; el.dataset.no=s.no;
     el.innerHTML=`<div class="pindot" style="background:${color}"><span>${TYPE_LETTER[s.type]||'•'}</span></div>
-      <div class="txt"><div class="name">${esc(s.name)}</div><div class="meta">${esc(s.region)} • ${esc(TYPE_LABEL[s.type]||s.type)} • No ${esc(s.no)}</div></div>`;
-    el.onclick=()=>{ flyTo(s.no); };
+      <div class="txt"><div class="name">${esc(s.name)}</div><div class="meta">${esc(s.region)} • ${esc(TYPE_LABEL[s.type]||s.type)} • No ${esc(s.no)}${has?'':' • Koordinat yok'}</div></div>${has?'':'<span class="warnico">⚠️</span>'}`;
+    el.onclick=()=>{ if(s.lat==null){ placeStation(s.no); } else { flyTo(s.no); } };
     list.appendChild(el);
   });
-  updateCount();
-}
-function updateCount(){
-  const withC=STATIONS.filter(s=>s.lat!=null).length;
-  const miss=STATIONS.length-withC;
-  document.getElementById('countLabel').textContent=`${STATIONS.length} istasyon • ${withC} haritada${miss?` • ${miss} eksik`:''}`;
 }
 
 function flyTo(no){
@@ -1619,7 +1630,6 @@ buildMarkers();
 renderList();
 applyFilters();
 fitAll();
-updateCount();
 </script>
 </body>
 </html>
