@@ -1183,13 +1183,22 @@ let svPos=null, svFmt=0, svTry=0;
 function resetMapDrag(){
   try{ if(map.dragging && map.dragging.enabled()){ map.dragging.disable(); map.dragging.enable(); } }catch(e){}
 }
+let svOpenT=null;
 window.openSvPano=function(lat,lon,title){
   resetMapDrag();
   svPos={la:(+lat).toFixed(6), lo:(+lon).toFixed(6)};
   svFmt=0; svTry=0;
   document.getElementById('svmTitle').textContent=title||'Sokak Görünümü';
-  document.getElementById('svmFrame').src=SV_EMBED_FMTS[svFmt](svPos.la,svPos.lo);
+  const f=document.getElementById('svmFrame');
+  f.src='about:blank';
   document.getElementById('svModal').classList.add('open');
+  /* Panorama, pencere GÖRÜNÜR olduktan sonra yüklenmeli:
+     gizliyken (0 boyut) başlarsa Google'ın motoru boş kalıyor. */
+  clearTimeout(svOpenT);
+  svOpenT=setTimeout(()=>{
+    if(document.getElementById('svModal').classList.contains('open') && svPos)
+      f.src=SV_EMBED_FMTS[svFmt](svPos.la,svPos.lo);
+  }, 120);
 };
 window.svRefresh=function(){
   if(!svPos) return;
@@ -1201,6 +1210,7 @@ window.svRefresh=function(){
   toast('Yenileniyor…');
 };
 window.closeSvPano=function(){
+  clearTimeout(svOpenT);
   document.getElementById('svModal').classList.remove('open');
   document.getElementById('svmFrame').src='about:blank';
   resetMapDrag();
@@ -1388,6 +1398,16 @@ function addMarker(s){
     setCoord(s.no, ll.lat, ll.lng, true);
     m.setPopupContent(popupNormal(s));
     toast(s.name+" taşındı");
+  });
+  m.on('click',(e)=>{
+    if(state.placing!=null && state.placing!==s.no){
+      const no=state.placing;
+      const ll=e.latlng || m.getLatLng();
+      setCoord(no, ll.lat, ll.lng, true);
+      cancelPlace();
+      setTimeout(()=>{ map.closePopup(); flyTo(no); }, 50);
+      toast("Konum eklendi");
+    }
   });
   m.on('popupopen',()=>{ highlight(s.no); });
   m._sno=s.no;
@@ -1610,6 +1630,7 @@ window.addStation=function(){
   persist(); renderList();
   closeAddPanel();
   placeStation(noV);
+  toast("👆 Şimdi haritada bir yere dokun");
 };
 document.getElementById('addModal').addEventListener('click',e=>{ if(e.target.id==='addModal') closeAddPanel(); });
 
