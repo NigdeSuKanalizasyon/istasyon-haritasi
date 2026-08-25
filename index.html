@@ -981,8 +981,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div class="svm-head">
           <span>🧍</span>
           <div class="svm-title" id="svmTitle">Sokak Görünümü</div>
-          <button class="svm-btn" onclick="svNextFormat()" title="Panorama gelmezse farklı gömme biçimi dene">🔁 Gelmedi mi?</button>
-          <a class="svm-btn" id="svmNew" href="#" target="_blank" rel="noopener" title="Google Maps'te aç">↗ Yeni sekme</a>
+          <button class="svm-btn" onclick="svRefresh()" title="Panoramayı yenile">🔁 Yenile</button>
           <button class="svm-btn x" onclick="closeSvPano()" title="Kapat">×</button>
         </div>
         <iframe id="svmFrame" src="about:blank" allowfullscreen loading="eager"
@@ -1180,26 +1179,26 @@ const SV_EMBED_FMTS = [
   (la,lo)=>`https://maps.google.com/maps?q=&layer=c&cbll=${la},${lo}&cbp=11,0,0,0,0&source=embed&output=svembed&hl=tr`,
   (la,lo)=>`https://maps.google.com/maps?layer=c&cbll=${la},${lo}&cbp=12,0,,0,0&output=svembed&hl=tr`
 ];
-let svPos=null, svFmt=0;
-// Kullanıcının 🔁 ile seçtiği motoru hatırla
-try{ const f=parseInt(localStorage.getItem('sv_fmt_pref')); if(f>=0&&f<SV_EMBED_FMTS.length) svFmt=f; }catch(e){}
+let svPos=null, svFmt=0, svTry=0;
 function resetMapDrag(){
   try{ if(map.dragging && map.dragging.enabled()){ map.dragging.disable(); map.dragging.enable(); } }catch(e){}
 }
 window.openSvPano=function(lat,lon,title){
   resetMapDrag();
   svPos={la:(+lat).toFixed(6), lo:(+lon).toFixed(6)};
+  svFmt=0; svTry=0;
   document.getElementById('svmTitle').textContent=title||'Sokak Görünümü';
-  document.getElementById('svmNew').href=`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${svPos.la},${svPos.lo}`;
   document.getElementById('svmFrame').src=SV_EMBED_FMTS[svFmt](svPos.la,svPos.lo);
   document.getElementById('svModal').classList.add('open');
 };
-window.svNextFormat=function(){
+window.svRefresh=function(){
   if(!svPos) return;
-  svFmt=(svFmt+1)%SV_EMBED_FMTS.length;
-  try{ localStorage.setItem('sv_fmt_pref', String(svFmt)); }catch(e){}
-  document.getElementById('svmFrame').src=SV_EMBED_FMTS[svFmt](svPos.la,svPos.lo);
-  toast('Motor '+(svFmt+1)+'/'+SV_EMBED_FMTS.length+(svFmt===0?' (modern)':' (eski)'));
+  svTry++;
+  if(svTry>1){ svFmt=(svFmt+1)%SV_EMBED_FMTS.length; }   // üst üste basılırsa yedek motorları dene
+  const f=document.getElementById('svmFrame');
+  f.src='about:blank';
+  setTimeout(()=>{ f.src=SV_EMBED_FMTS[svFmt](svPos.la,svPos.lo); }, 60);
+  toast('Yenileniyor…');
 };
 window.closeSvPano=function(){
   document.getElementById('svModal').classList.remove('open');
