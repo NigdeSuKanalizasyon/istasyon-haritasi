@@ -720,25 +720,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .search .icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted)}
 
   .sec-title{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;margin:14px 2px 8px}
-  .chips{display:flex;flex-wrap:wrap;gap:6px}
-  .chip{
-    display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border:1px solid var(--line);
-    border-radius:999px;font-size:12px;cursor:pointer;user-select:none;background:#fff;transition:.15s;
-  }
-  .chip .dot{width:9px;height:9px;border-radius:50%}
-  .chip.off{opacity:.38;filter:grayscale(.4)}
-  .chip:active{transform:scale(.96)}
-
-  .toggle-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-top:6px;background:#f8fafc}
-  .toggle-row .t-label{font-size:13px;font-weight:600}
-  .toggle-row .t-sub{font-size:11px;color:var(--muted);margin-top:2px}
-  .switch{position:relative;width:44px;height:26px;flex:none}
-  .switch input{opacity:0;width:0;height:0}
-  .slider{position:absolute;inset:0;background:#cbd5e1;border-radius:999px;transition:.2s;cursor:pointer}
-  .slider:before{content:"";position:absolute;height:20px;width:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
-  .switch input:checked + .slider{background:var(--accent)}
-  .switch input:checked + .slider:before{transform:translateX(18px)}
-
   .list{margin-top:6px;display:flex;flex-direction:column;gap:4px}
   .item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;cursor:pointer;border:1px solid transparent}
   .item:hover{background:#f1f5f9}
@@ -750,11 +731,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .item .meta{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .item .warnico{color:var(--warn);font-size:15px}
 
-  .missing-box{background:var(--warn-bg);border:1px solid #fcd34d;border-radius:10px;padding:10px;margin-bottom:6px}
-  .missing-box .mb-title{font-size:12px;font-weight:700;color:var(--warn);display:flex;align-items:center;gap:6px;margin-bottom:6px}
-  .btn-mini{font-size:11px;padding:4px 8px;border-radius:7px;border:1px solid var(--warn);color:var(--warn);background:#fff;cursor:pointer;font-weight:600}
-  .btn-mini:active{transform:scale(.96)}
-
   /* ---------- Map ---------- */
   #map{flex:1;height:100%;background:#e5e7eb}
   .leaflet-container{font:inherit}
@@ -764,8 +740,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .pin-svg{filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}
   .pin-sel{animation:pop .3s ease}
   @keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
-  .drag-on .leaflet-marker-icon{cursor:grab}
-  .drag-on .leaflet-marker-icon:active{cursor:grabbing}
 
   /* Sokak Görünümü kontrolü (Google Maps'teki sarı adam gibi) */
   .sv-ctrl{border:none !important;box-shadow:var(--shadow) !important;border-radius:10px !important;overflow:hidden}
@@ -794,11 +768,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .pp-btns{display:flex;gap:6px}
   .pp-btn{flex:1;padding:9px 6px;border-radius:9px;border:1px solid var(--line);background:#fff;font-size:12.5px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none;color:var(--ink)}
   .pp-btn.go{background:#16a34a;color:#fff;border-color:#16a34a}
-  .pp-btn.edit{background:#f8fafc}
   .pp-btn.sv{background:#0f172a;color:#fff;border-color:#0f172a}
-  .pp-edit label{font-size:11px;color:var(--muted);font-weight:600;display:block;margin:6px 0 3px}
-  .pp-edit input{width:100%;padding:8px;border:1px solid var(--line);border-radius:8px;font-size:13px;font-family:ui-monospace,monospace}
-  .pp-hint{font-size:11px;color:var(--muted);margin:6px 0 2px;line-height:1.35}
 
   /* Floating controls */
   .fab{position:absolute;z-index:1100;border:none;background:#fff;box-shadow:var(--shadow);border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
@@ -831,7 +801,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
     font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
   .svm-btn:active{transform:scale(.96)}
   .svm-btn.x{background:#dc2626;font-size:14px;padding:6px 12px}
-  #svmFrame{flex:1;border:0;width:100%;background:#000}
+  .svm-body{flex:1;position:relative;background:#000;overflow:hidden}
+  .svm-body iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+  .svm-load{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    color:#94a3b8;font-size:13px;background:#000;z-index:2}
   @media (max-width:820px){
     #svModal{padding:0}
     .svm-box{width:100vw;height:100dvh;border-radius:0;
@@ -849,33 +822,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
   #tileHelp button{pointer-events:auto;background:#78350f;color:#fff;border:none;border-radius:8px;
             padding:5px 10px;font-size:11.5px;font-weight:700;cursor:pointer;flex:none;align-self:center}
 
-  /* ---------- Düzenleme paneli (popup dışında) ---------- */
-  #editPanel{position:absolute;left:14px;bottom:14px;z-index:1350;width:300px;max-width:calc(100vw - 28px);
-    background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);
-    padding:14px;display:none}
-  #editPanel.open{display:block}
-  .ep-head{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px}
-  .ep-name{font-size:14.5px;font-weight:800;line-height:1.25;flex:1}
-  .ep-sub{font-size:11px;color:var(--muted);margin-top:2px}
-  .ep-x{background:none;border:none;font-size:22px;line-height:1;color:var(--muted);cursor:pointer;padding:0 2px}
-  .ep-grid{display:flex;gap:8px}
-  .ep-grid > div{flex:1;min-width:0}
-  .ep-grid label{font-size:11px;color:var(--muted);font-weight:700;display:block;margin-bottom:3px}
-  .ep-grid input{width:100%;padding:9px 8px;border:1px solid var(--line);border-radius:9px;
-    font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-  .ep-grid input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
-  .ep-hint{font-size:11.5px;color:var(--muted);line-height:1.4;margin:9px 0 10px}
   .ep-btns{display:flex;gap:7px}
   .ep-btn{flex:1;padding:10px 6px;border-radius:10px;border:1px solid var(--line);background:#fff;
     font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap}
   .ep-btn:active{transform:scale(.97)}
-  .ep-btn.drag{background:#f1f5f9}
-  .ep-btn.drag.active{background:#2563eb;color:#fff;border-color:#2563eb}
-  .ep-btn.save{background:#16a34a;color:#fff;border-color:#16a34a}
-  @media (max-width:820px){
-    #editPanel{left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom));width:auto}
-  }
-
   @media (max-width:820px){
     #sidebar{position:absolute;top:0;left:0;transform:translateX(-100%);box-shadow:var(--shadow);width:86vw;min-width:0;max-width:360px}
     #sidebar.open{transform:translateX(0)}
@@ -904,17 +854,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     .btn-mini{padding:7px 11px;font-size:12px}
     .chip{padding:7px 11px;font-size:12.5px}
   }
-
-  /* ---------- Yeni nokta formu ---------- */
-  #addModal{position:fixed;inset:0;z-index:1600;background:rgba(15,23,42,.6);display:none;
-    align-items:center;justify-content:center;padding:18px}
-  #addModal.open{display:flex}
-  .ad-card{background:#fff;border-radius:16px;box-shadow:var(--shadow);max-width:360px;width:100%;padding:20px}
-  .ad-card h3{margin:0 0 12px;font-size:16px}
-  .ad-card label{font-size:11px;color:var(--muted);font-weight:700;display:block;margin:8px 0 3px}
-  .ad-card input, .ad-card select{width:100%;padding:9px 8px;border:1px solid var(--line);border-radius:9px;font-size:14px;background:#fff}
-  .ad-card input:focus, .ad-card select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
-  @media (pointer:coarse){ .ad-card input, .ad-card select{font-size:16px} }
 
   /* ---------- QR penceresi ---------- */
   #qrModal{position:fixed;inset:0;z-index:1600;background:rgba(15,23,42,.6);display:none;
@@ -945,8 +884,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <span class="icon">🔎</span>
         <input id="search" type="text" placeholder="İstasyon ara (ad / no / bölge)…" autocomplete="off" />
       </div>
-
-      <button class="ep-btn" id="addBtn" style="width:100%;margin-top:4px;background:#16a34a;color:#fff;border-color:#16a34a" onclick="openAddPanel()">➕ Yeni Nokta Ekle</button>
 
       <div class="sec-title" id="qrSecTitle">Uygulama</div>
       <button class="ep-btn" id="installBtn" style="width:100%;display:none;margin-bottom:6px;background:#2563eb;color:#fff;border-color:#2563eb" onclick="installApp()">📲 Uygulama olarak yükle</button>
@@ -984,28 +921,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <button class="svm-btn" onclick="svRefresh()" title="Panoramayı yenile">🔁 Yenile</button>
           <button class="svm-btn x" onclick="closeSvPano()" title="Kapat">×</button>
         </div>
-        <iframe id="svmFrame" src="about:blank" allowfullscreen loading="eager"
-                allow="accelerometer; gyroscope; fullscreen"></iframe>
-      </div>
-    </div>
-
-    <div id="addModal">
-      <div class="ad-card">
-        <h3>➕ Yeni Nokta Ekle</h3>
-        <label>İstasyon adı</label>
-        <input id="adName" type="text" placeholder="Örn: AMAS K21" autocomplete="off" />
-        <div style="display:flex;gap:8px">
-          <div style="flex:1"><label>Nokta No</label><input id="adNo" type="text" inputmode="numeric" autocomplete="off" /></div>
-          <div style="flex:1"><label>Tip</label><select id="adType"><option value="Kuyu">Kuyu</option><option value="Terfi">Terfi</option><option value="Depo">Depo</option></select></div>
-        </div>
-        <label>Bölge</label>
-        <input id="adRegion" type="text" list="regionList" placeholder="Örn: AMAS" autocomplete="off" />
-        <datalist id="regionList"></datalist>
-        <div class="ep-hint" style="margin-top:10px">Ekle'ye bastıktan sonra <b>haritada yerine dokun</b> — pin oraya konur. Üstteki şeritten koordinatı elle de girebilirsin.</div>
-        <div class="ep-btns" style="margin-top:6px">
-          <button class="ep-btn save" onclick="addStation()">✓ Ekle</button>
-          <button class="ep-btn" onclick="closeAddPanel()">İptal</button>
-        </div>
+        <div class="svm-body" id="svmBody"></div>
       </div>
     </div>
 
@@ -1019,25 +935,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
       </div>
     </div>
 
-    <div id="editPanel">
-      <div class="ep-head">
-        <div style="flex:1">
-          <div class="ep-name" id="epName">—</div>
-          <div class="ep-sub" id="epSub"></div>
-        </div>
-        <button class="ep-x" onclick="panelCancel()" title="Kapat">×</button>
-      </div>
-      <div class="ep-grid">
-        <div><label>Enlem (lat)</label><input id="epLat" type="text" inputmode="decimal" placeholder="38.012345" /></div>
-        <div><label>Boylam (long)</label><input id="epLon" type="text" inputmode="decimal" placeholder="34.712345" /></div>
-      </div>
-      <div class="ep-hint" id="epHint"><b>Sürükle</b>’ye bas, pini haritada taşı. Koordinatı elle de yazabilirsin.</div>
-      <div class="ep-btns">
-        <button class="ep-btn drag" id="epDragBtn" onclick="panelDrag()">📍 Sürükle</button>
-        <button class="ep-btn save" onclick="panelSave()">✓ Kaydet</button>
-        <button class="ep-btn" onclick="panelCancel()">İptal</button>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -1055,7 +952,6 @@ const REGION_COLORS = {
 const FALLBACK_COLORS = ["#0d9488","#7c3aed","#e11d48","#4f46e5","#65a30d","#c026d3","#0369a1","#b45309"];
 const TYPE_LETTER = {"Kuyu":"K","Terfi":"T","Depo":"D"};
 const TYPE_LABEL  = {"Kuyu":"Kuyu","Terfi":"Terfi","Depo":"Depo"};
-const STORAGE_KEY = "istasyon_konumlari_v1";
 
 /* ================= DURUM ================= */
 let regionColorMap = {};
@@ -1066,49 +962,10 @@ let regionColorMap = {};
 })();
 
 const state = {
-  markers:{},              // no -> L.marker
-  activeRegions:new Set(STATIONS.map(s=>s.region)),
-  activeTypes:new Set(STATIONS.map(s=>s.type)),
+  markers:{},   // no -> L.marker
   search:"",
-  dragMode:false,
-  placing:null,
-  editNo:null, editOrig:null, editDrag:false,
-  svMode:false,            // no of station being placed
+  svMode:false
 };
-
-/* Kaydedilen değişiklikleri geri yükle */
-(function loadSaved(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(!raw) return;
-    const saved = JSON.parse(raw);
-    STATIONS.forEach(s=>{
-      if(saved[s.no] && typeof saved[s.no].lat==="number"){
-        s.lat = saved[s.no].lat; s.lon = saved[s.no].lon;
-      }
-    });
-  }catch(e){/* localStorage yoksa sessizce geç */}
-  try{
-    const rawC = localStorage.getItem('istasyon_yeni_v1');
-    if(rawC){
-      JSON.parse(rawC).forEach(cs=>{
-        if(!STATIONS.some(s=>s.no===cs.no)){
-          cs._custom=true; STATIONS.push(cs);
-          state.activeRegions.add(cs.region); state.activeTypes.add(cs.type);
-        }
-      });
-    }
-  }catch(e){}
-})();
-function persist(){
-  try{
-    const obj={};
-    STATIONS.forEach(s=>{ if(s.lat!=null) obj[s.no]={lat:s.lat,lon:s.lon}; });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
-    const customs=STATIONS.filter(s=>s._custom).map(s=>({no:s.no,name:s.name,region:s.region,type:s.type,lat:s.lat,lon:s.lon}));
-    localStorage.setItem('istasyon_yeni_v1', JSON.stringify(customs));
-  }catch(e){}
-}
 
 /* ================= HARİTA ================= */
 const map = L.map('map',{zoomControl:true, attributionControl:true});
@@ -1173,46 +1030,53 @@ window.toggleSvMode=function(){
 /* Panoramayı uygulama İÇİNDE aç (yeni sekme yok) — Google'ın anahtarsız gömme adresi.
    cbp parametresi şart: onsuz panorama yerine düz harita geliyor. */
 const SV_EMBED_FMTS = [
-  // 1) MODERN motor (tıklama yapışması yok) — koordinattan en yakın panoramayı bulur
-  (la,lo)=>`https://www.google.com/maps/embed?pb=!4v0!6m8!1m7!1s!2m2!1d${la}!2d${lo}!3f0!4f0!5f0.7820865974627469`,
-  // 2-3) Eski motor (yedek)
+  // 1) Kanıtlanmış motor — panorama tek seferde gelir
   (la,lo)=>`https://maps.google.com/maps?q=&layer=c&cbll=${la},${lo}&cbp=11,0,0,0,0&source=embed&output=svembed&hl=tr`,
-  (la,lo)=>`https://maps.google.com/maps?layer=c&cbll=${la},${lo}&cbp=12,0,,0,0&output=svembed&hl=tr`
+  // 2-3) Yedekler
+  (la,lo)=>`https://maps.google.com/maps?layer=c&cbll=${la},${lo}&cbp=12,0,,0,0&output=svembed&hl=tr`,
+  (la,lo)=>`https://www.google.com/maps/embed?pb=!4v0!6m8!1m7!1s!2m2!1d${la}!2d${lo}!3f0!4f0!5f0.7820865974627469`
 ];
-let svPos=null, svFmt=0, svTry=0;
+let svPos=null, svFmt=0, svTry=0, svMountT=null;
 function resetMapDrag(){
   try{ if(map.dragging && map.dragging.enabled()){ map.dragging.disable(); map.dragging.enable(); } }catch(e){}
 }
-let svOpenT=null;
+/* Panoramayı HER SEFERİNDE sıfırdan bir iframe ile yükle:
+   - src değiştirme yarışı yok (boş kalmanın sebebi buydu)
+   - pencere boyandıktan sonra bağlanır, açılış tıklamasının fare durumu sızmaz */
+function svMount(){
+  const box=document.getElementById('svmBody');
+  if(!box || !svPos) return;
+  box.innerHTML='<div class="svm-load" id="svmLoad">Panorama yükleniyor…</div>';
+  const f=document.createElement('iframe');
+  f.id='svmFrame';
+  f.setAttribute('allowfullscreen','');
+  f.setAttribute('allow','accelerometer; gyroscope; fullscreen');
+  f.setAttribute('referrerpolicy','no-referrer-when-downgrade');
+  f.addEventListener('load', ()=>{ const l=document.getElementById('svmLoad'); if(l) l.style.display='none'; });
+  f.src=SV_EMBED_FMTS[svFmt](svPos.la, svPos.lo);
+  box.appendChild(f);
+}
 window.openSvPano=function(lat,lon,title){
   resetMapDrag();
   svPos={la:(+lat).toFixed(6), lo:(+lon).toFixed(6)};
   svFmt=0; svTry=0;
   document.getElementById('svmTitle').textContent=title||'Sokak Görünümü';
-  const f=document.getElementById('svmFrame');
-  f.src='about:blank';
+  const box=document.getElementById('svmBody'); if(box) box.innerHTML='';
   document.getElementById('svModal').classList.add('open');
-  /* Panorama, pencere GÖRÜNÜR olduktan sonra yüklenmeli:
-     gizliyken (0 boyut) başlarsa Google'ın motoru boş kalıyor. */
-  clearTimeout(svOpenT);
-  svOpenT=setTimeout(()=>{
-    if(document.getElementById('svModal').classList.contains('open') && svPos)
-      f.src=SV_EMBED_FMTS[svFmt](svPos.la,svPos.lo);
-  }, 120);
+  clearTimeout(svMountT);
+  svMountT=setTimeout(()=>{ requestAnimationFrame(svMount); }, 160);
 };
 window.svRefresh=function(){
   if(!svPos) return;
   svTry++;
-  if(svTry>1){ svFmt=(svFmt+1)%SV_EMBED_FMTS.length; }   // üst üste basılırsa yedek motorları dene
-  const f=document.getElementById('svmFrame');
-  f.src='about:blank';
-  setTimeout(()=>{ f.src=SV_EMBED_FMTS[svFmt](svPos.la,svPos.lo); }, 60);
+  if(svTry>1) svFmt=(svFmt+1)%SV_EMBED_FMTS.length;   // üst üste basılırsa yedek motoru dene
+  svMount();
   toast('Yenileniyor…');
 };
 window.closeSvPano=function(){
-  clearTimeout(svOpenT);
+  clearTimeout(svMountT);
   document.getElementById('svModal').classList.remove('open');
-  document.getElementById('svmFrame').src='about:blank';
+  const box=document.getElementById('svmBody'); if(box) box.innerHTML='';
   resetMapDrag();
 };
 window.svPanoFor=function(no){
@@ -1220,7 +1084,7 @@ window.svPanoFor=function(no){
   if(s && s.lat!=null) openSvPano(s.lat, s.lon, s.name);
 };
 document.getElementById('svModal').addEventListener('click', e=>{ if(e.target.id==='svModal') closeSvPano(); });
-document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeSvPano(); if(window.closeQr) closeQr(); if(window.closeAddPanel) closeAddPanel(); } });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeSvPano(); if(window.closeQr) closeQr(); } });
 
 const SVControl = L.Control.extend({
   options:{position:'topright'},
@@ -1277,88 +1141,13 @@ function popupNormal(s){
       <span class="pp-badge type">${esc(TYPE_LABEL[s.type]||s.type)}</span>
     </div>
     <div class="pp-coord" title="Kopyalamak için tıkla" onclick="copyCoord(${s.no})">${coordTxt}</div>
-    <div class="pp-btns">
-      ${hasC ? `<a class="pp-btn go" href="https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lon}" target="_blank" rel="noopener">🧭 Git</a>` : ``}
-      <button class="pp-btn edit" onclick="openEditPanel(${s.no})">✏️ Düzenle</button>
+    ${hasC ? `<div class="pp-btns">
+      <a class="pp-btn go" href="https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lon}" target="_blank" rel="noopener">🧭 Git</a>
     </div>
-    ${hasC ? `<div class="pp-btns" style="margin-top:6px">
+    <div class="pp-btns" style="margin-top:6px">
       <button class="pp-btn sv" onclick="svPanoFor(${s.no})">🧍 Sokak Görünümü</button>
     </div>` : ``}`;
 }
-/* ================= DÜZENLEME PANELİ (popup dışında — güvenilir) ================= */
-function epEl(id){ return document.getElementById(id); }
-function epSetInputs(lat,lon){
-  epEl('epLat').value = (lat==null?'':(+lat).toFixed(6));
-  epEl('epLon').value = (lon==null?'':(+lon).toFixed(6));
-}
-function setPanelDrag(on){
-  state.editDrag=!!on;
-  const no=state.editNo, m=no!=null?state.markers[no]:null;
-  if(m && m.dragging){
-    if(on) m.dragging.enable();
-    else if(!state.dragMode) m.dragging.disable();
-  }
-  const btn=epEl('epDragBtn');
-  btn.classList.toggle('active', !!on);
-  btn.innerHTML = on ? '📍 Sürükleme açık' : '📍 Sürükle';
-  epEl('epHint').innerHTML = on
-    ? 'Pini haritada istediğin yere <b>sürükle</b> — koordinatlar otomatik dolar. Sonra <b>Kaydet</b>.'
-    : '<b>Sürükle</b>’ye bas, pini haritada taşı. Koordinatı elle de yazabilirsin.';
-}
-window.openEditPanel = function(no){
-  const s=byNo(no); if(!s) return;
-  map.closePopup();
-  state.editNo=no;
-  state.editOrig = (s.lat!=null)?{lat:s.lat,lon:s.lon}:null;
-  epEl('epName').textContent=s.name;
-  epEl('epSub').textContent=`${s.region} • ${TYPE_LABEL[s.type]||s.type} • No ${s.no}`;
-  epSetInputs(s.lat,s.lon);
-  epEl('editPanel').classList.add('open');
-  const hasM=!!state.markers[no];
-  epEl('epDragBtn').disabled=!hasM;
-  epEl('epDragBtn').style.opacity=hasM?'1':'.45';
-  setPanelDrag(false);
-  if(s.lat!=null) map.panTo([s.lat,s.lon]);
-  else toast('Koordinat yaz ya da haritada "Yerleştir" ile seç');
-  highlight(no);
-};
-window.panelDrag = function(){
-  if(state.editNo==null) return;
-  if(!state.markers[state.editNo]){ toast('Önce bir koordinat gir'); return; }
-  setPanelDrag(!state.editDrag);
-  if(state.editDrag) toast('Pini sürükle, sonra Kaydet');
-};
-window.panelSave = function(){
-  const no=state.editNo; if(no==null) return;
-  const s=byNo(no);
-  let latV=epEl('epLat').value.trim(), lonV=epEl('epLon').value.trim();
-  if(latV.includes(',') && !lonV){ const p=latV.split(','); latV=p[0]; lonV=p[1]; }
-  const lat=parseFloat(String(latV).replace(',','.').trim());
-  const lon=parseFloat(String(lonV).replace(',','.').trim());
-  if(!isFinite(lat)||!isFinite(lon)||lat<-90||lat>90||lon<-180||lon>180){ toast('Geçersiz koordinat'); return; }
-  setPanelDrag(false);
-  setCoord(no, lat, lon, true);
-  const m=state.markers[no];
-  if(m){ m.setPopupContent(popupNormal(s)); }
-  map.panTo([lat,lon]);
-  closeEditPanel();
-  toast('Konum kaydedildi');
-};
-window.panelCancel = function(){
-  const no=state.editNo;
-  if(no!=null){
-    const m=state.markers[no], o=state.editOrig;
-    setPanelDrag(false);
-    if(m && o) m.setLatLng([o.lat,o.lon]);   // sürüklendiyse eski yerine dön
-  }
-  closeEditPanel();
-};
-function closeEditPanel(){
-  setPanelDrag(false);
-  state.editNo=null; state.editOrig=null;
-  epEl('editPanel').classList.remove('open');
-}
-window.closeEditPanel=closeEditPanel;
 window.copyCoord = function(no){
   const s=byNo(no); if(s.lat==null) return;
   const t=`${s.lat.toFixed(6)}, ${s.lon.toFixed(6)}`;
@@ -1369,50 +1158,16 @@ window.copyCoord = function(no){
 /* ================= YARDIMCI ================= */
 function byNo(no){ return STATIONS.find(s=>s.no===no); }
 function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg;
-  t.classList.toggle('up', document.getElementById('editPanel').classList.contains('open')); t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),1800); }
-
-/* Koordinat ata / güncelle */
-function setCoord(no, lat, lon, refreshList){
-  const s=byNo(no);
-  const firstTime = (s.lat==null);
-  s.lat=+lat.toFixed(6); s.lon=+lon.toFixed(6);
-  if(state.markers[no]){
-    state.markers[no].setLatLng([s.lat,s.lon]);
-    state.markers[no].setIcon(makeIcon(s,true));
-  }else{
-    addMarker(s); // yeni yerleştirilen
-  }
-  persist();
-  if(refreshList) renderList();
-}
+  t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),1800); }
 
 /* ================= MARKER ================= */
 function addMarker(s){
   if(s.lat==null) return null;
-  const m=L.marker([s.lat,s.lon],{icon:makeIcon(s,false), draggable:false, autoPan:true});
+  const m=L.marker([s.lat,s.lon],{icon:makeIcon(s,false)});
   m.bindPopup(popupNormal(s),{closeButton:true});
-  m.on('drag', ()=>{ if(state.editNo===s.no){ const ll=m.getLatLng(); epSetInputs(ll.lat,ll.lng); } });
-  m.on('dragend', ()=>{
-    const ll=m.getLatLng();
-    if(state.editNo===s.no){ epSetInputs(ll.lat,ll.lng); return; }  // panel açık: Kaydet'i bekle
-    setCoord(s.no, ll.lat, ll.lng, true);
-    m.setPopupContent(popupNormal(s));
-    toast(s.name+" taşındı");
-  });
-  m.on('click',(e)=>{
-    if(state.placing!=null && state.placing!==s.no){
-      const no=state.placing;
-      const ll=e.latlng || m.getLatLng();
-      setCoord(no, ll.lat, ll.lng, true);
-      cancelPlace();
-      setTimeout(()=>{ map.closePopup(); flyTo(no); }, 50);
-      toast("Konum eklendi");
-    }
-  });
   m.on('popupopen',()=>{ highlight(s.no); });
   m._sno=s.no;
   m.addTo(map);
-  if(state.dragMode && m.dragging) m.dragging.enable();
   state.markers[s.no]=m;
   return m;
 }
@@ -1430,7 +1185,7 @@ function applyFilters(){
   STATIONS.forEach(s=>{
     const m=state.markers[s.no];
     if(!m) return;
-    const visible = state.activeRegions.has(s.region) && state.activeTypes.has(s.type) && matchSearch(s);
+    const visible = matchSearch(s);
     if(visible){ if(!map.hasLayer(m)) m.addTo(map); }
     else{ if(map.hasLayer(m)) map.removeLayer(m); }
   });
@@ -1476,17 +1231,14 @@ function matchSearch(s){
   return tokens.every(t=>tokenHits(t,hay,words));
 }
 
-/* ================= LİSTE / FİLTRE UI ================= */
+/* ================= LİSTE ================= */
 function renderList(){
   const list=document.getElementById('list'); list.innerHTML='';
-  const shown=STATIONS.filter(s=> state.activeRegions.has(s.region) && state.activeTypes.has(s.type) && matchSearch(s));
-  shown.forEach(s=>{
-    const has = s.lat!=null;
-    const color= has ? pinColor(s) : '#94a3b8';
+  STATIONS.filter(matchSearch).forEach(s=>{
     const el=document.createElement('div'); el.className='item'; el.dataset.no=s.no;
-    el.innerHTML=`<div class="pindot" style="background:${color}"><span>${TYPE_LETTER[s.type]||'•'}</span></div>
-      <div class="txt"><div class="name">${esc(s.name)}</div><div class="meta">${esc(s.region)} • ${esc(TYPE_LABEL[s.type]||s.type)} • No ${esc(s.no)}${has?'':' • Koordinat yok'}</div></div>${has?'':'<span class="warnico">⚠️</span>'}`;
-    el.onclick=()=>{ if(s.lat==null){ placeStation(s.no); } else { flyTo(s.no); } };
+    el.innerHTML=`<div class="pindot" style="background:${pinColor(s)}"><span>${TYPE_LETTER[s.type]||'•'}</span></div>
+      <div class="txt"><div class="name">${esc(s.name)}</div><div class="meta">${esc(s.region)} • ${esc(TYPE_LABEL[s.type]||s.type)} • No ${esc(s.no)}</div></div>`;
+    el.onclick=()=>{ flyTo(s.no); };
     list.appendChild(el);
   });
 }
@@ -1501,41 +1253,8 @@ function flyTo(no){
   if(window.innerWidth<=820) closeDrawer();
 }
 
-/* ================= EKSİK KONUM YERLEŞTİRME ================= */
-window.placeStation = function(no){
-  const s=byNo(no);
-  state.placing=no;
-  if(window.innerWidth<=820) closeDrawer();
-  const b=document.getElementById('banner');
-  b.style.display='flex';
-  b.innerHTML=`<span>📍 <b>${esc(s.name)}</b> için haritada bir yere dokun</span>
-     <button onclick="promptCoord(${no})">Koordinat gir</button>
-     <button onclick="cancelPlace()">Vazgeç</button>`;
-};
-window.cancelPlace=function(){ state.placing=null; document.getElementById('banner').style.display='none'; };
-window.promptCoord=function(no){
-  const s=byNo(no);
-  const val=prompt(`${s.name} için koordinat girin (enlem, boylam):`, "38.01, 34.71");
-  if(!val) return;
-  const p=val.split(',');
-  const lat=parseFloat((p[0]||'').replace(',','.').trim());
-  const lon=parseFloat((p[1]||'').replace(',','.').trim());
-  if(!isFinite(lat)||!isFinite(lon)){ toast("Geçersiz koordinat"); return; }
-  setCoord(no,lat,lon,true);
-  cancelPlace();
-  flyTo(no);
-  toast("Konum eklendi");
-};
 map.on('click', e=>{
-  if(state.placing!=null){
-    const no=state.placing;
-    setCoord(no, e.latlng.lat, e.latlng.lng, true);
-    cancelPlace();
-    flyTo(no);
-    toast("Konum eklendi");
-    return;
-  }
-  if(state.svMode){   // Google Maps gibi: tıklanan noktanın sokak görünümü UYGULAMA İÇİNDE açılır
+  if(state.svMode){   // Google Maps gibi: tıklanan noktanın sokak görünümü uygulama içinde açılır
     openSvPano(e.latlng.lat, e.latlng.lng, 'Sokak Görünümü');
   }
 });
@@ -1602,37 +1321,6 @@ window.addEventListener('appinstalled', ()=>{ toast('Uygulama yüklendi 🎉'); 
     const el=document.getElementById('iosHint'); if(el) el.style.display='block';
   }
 })();
-
-/* ================= YENİ NOKTA EKLEME ================= */
-window.openAddPanel=function(){
-  const dl=document.getElementById('regionList');
-  dl.innerHTML=[...new Set(STATIONS.map(s=>s.region))].map(r=>`<option value="${esc(r)}">`).join('');
-  const maxNo=STATIONS.reduce((m,s)=>Math.max(m, +s.no||0), 0);
-  document.getElementById('adNo').value=String(maxNo+1);
-  document.getElementById('adName').value='';
-  document.getElementById('adRegion').value='';
-  document.getElementById('addModal').classList.add('open');
-  if(window.innerWidth<=820) closeDrawer();
-  setTimeout(()=>{try{document.getElementById('adName').focus()}catch(e){}},150);
-};
-window.closeAddPanel=function(){ document.getElementById('addModal').classList.remove('open'); };
-window.addStation=function(){
-  const name=document.getElementById('adName').value.trim();
-  const noV=parseInt(document.getElementById('adNo').value.trim(),10);
-  const type=document.getElementById('adType').value;
-  const region=document.getElementById('adRegion').value.trim()||'DİĞER';
-  if(!name){ toast('İstasyon adı gerekli'); return; }
-  if(!isFinite(noV) || noV<=0){ toast('Geçerli bir Nokta No gir'); return; }
-  if(STATIONS.some(s=>s.no===noV)){ toast('Bu Nokta No zaten kayıtlı: '+noV); return; }
-  const s={no:noV, name, region, type, lat:null, lon:null, _custom:true};
-  STATIONS.push(s);
-  state.activeRegions.add(region); state.activeTypes.add(type);
-  persist(); renderList();
-  closeAddPanel();
-  placeStation(noV);
-  toast("👆 Şimdi haritada bir yere dokun");
-};
-document.getElementById('addModal').addEventListener('click',e=>{ if(e.target.id==='addModal') closeAddPanel(); });
 
 /* ================= ARAMA ================= */
 document.getElementById('search').addEventListener('input', e=>{
