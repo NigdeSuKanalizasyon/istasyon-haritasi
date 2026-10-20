@@ -1,7 +1,7 @@
-/* İstasyon Haritası — app-shell cache
+/* Nokta Haritası — app-shell cache
    index.html: önce ağ (güncellemeler anında gelsin), çevrimdışıysa önbellek.
    Diğer aynı-kaynak dosyalar: önce önbellek. */
-const CACHE = 'istasyon-v5';   /* parolalı sürüm: eski önbellek temizlensin */
+const CACHE = 'nokta-v6';   /* yeni isim: eski önbellek temizlensin */
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
